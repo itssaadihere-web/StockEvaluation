@@ -46,7 +46,8 @@ The frontend server is running locally:
 ├── index.html                           # Modern financial analyst frontend
 ├── styles.css                           # Glassmorphism & print styles
 ├── app.js                               # Frontend logic, PDF extraction, Chart.js & n8n connector
-├── server.js                            # Static HTTP server (port 3000)
+├── local_server.js                      # Static HTTP server for local testing (node local_server.js)
+├── vercel.json                          # Vercel static deployment configuration
 ├── workflow_annual_report_comparison.json # Ready-to-import n8n workflow file
 ├── sample_company_a_apple.txt           # Sample Apple 10-K filing text
 └── sample_company_b_microsoft.txt       # Sample Microsoft 10-K filing text
