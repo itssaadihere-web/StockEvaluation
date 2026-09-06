@@ -1,0 +1,26 @@
+MICROSOFT CORPORATION - ANNUAL REPORT & 10-K HIGHLIGHTS
+
+Fiscal Year Financial Summary:
+- Total Revenue: $245.120 Billion (Up 15.7% YoY)
+- Microsoft Cloud Revenue: $135.000 Billion (+23% YoY, Azure growth accelerating at 29%)
+- Productivity and Business Processes (Office 365, LinkedIn): $74.500 Billion
+- Operating Income: $109.433 Billion (Operating Margin: 44.6%)
+- Net Income: $88.136 Billion (Diluted EPS: $11.80)
+- Cash Flow from Operations: $118.548 Billion
+- Free Cash Flow: $74.071 Billion (Capital Expenditures: $44.477 Billion for Cloud/AI data centers)
+
+Balance Sheet & Capital Returns:
+- Cash, Cash Equivalents & Short-Term Investments: $75.536 Billion
+- Total Long-Term Debt: $45.000 Billion
+- Total Stockholders' Equity: $206.223 Billion (Debt-to-Equity: 0.28x, AAA credit rating)
+- Share Repurchases: $22.000 Billion
+- Dividends Paid: $20.700 Billion (Annual Dividend Yield: 0.75%, Payout Ratio: 25.8%, 20+ years consecutive growth)
+
+Competitive Position & Economic Moat:
+- Unmatched enterprise software distribution monopoly across Fortune 500 enterprises.
+- Leader in generative AI integration with Microsoft 365 Copilot, Azure AI, and GitHub Copilot.
+- Multi-cloud infrastructure hyperscaler alongside AWS.
+
+Key Risk Factors:
+- Large-scale capital expenditure requirements for AI accelerators and data center capacity.
+- Enterprise IT spending moderation during macroeconomic tightening.

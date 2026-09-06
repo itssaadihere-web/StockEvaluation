@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EquiCompare AI | Annual Report Comparative Financial Analyst</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- PDF.js for client-side PDF text extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#10b981',
+              600: '#059669',
+              700: '#047857',
+              dark: '#0f172a',
+              card: '#1e293b',
+              border: '#334155'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <i data-lucide="line-chart" class="w-6 h-6 text-slate-950"></i>
+        </div>
+        <div>
+          <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+            EquiCompare <span class="text-emerald-400 font-extrabold text-xs px-2 py-0.5 rounded-full bg-emerald-950 border border-emerald-800/60 uppercase ml-1">AI Analyst</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden sm:block">Automated Dual Annual Report Valuation & Strategy Engine</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs & Settings -->
+      <div class="flex items-center space-x-3">
+        <nav class="flex space-x-1 bg-slate-800/80 p-1 rounded-lg border border-slate-700/60 text-xs sm:text-sm">
+          <button id="tab-analyze" onclick="switchView('analyze')" class="px-3.5 py-1.5 rounded-md font-medium transition-all bg-emerald-500 text-slate-950 shadow-sm">
+            <span class="flex items-center gap-1.5"><i data-lucide="file-diff" class="w-4 h-4"></i> Compare Reports</span>
+          </button>
+          <button id="tab-archive" onclick="switchView('archive')" class="px-3.5 py-1.5 rounded-md font-medium text-slate-300 hover:text-white transition-all">
+            <span class="flex items-center gap-1.5"><i data-lucide="folder-archive" class="w-4 h-4"></i> Report Archive <span id="archive-count" class="bg-slate-700 text-emerald-400 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span></span>
+          </button>
+        </nav>
+
+        <button onclick="toggleConfigModal()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white transition" title="n8n Workflow Settings">
+          <i data-lucide="settings" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ==================== VIEW 1: ANALYZE VIEW ==================== -->
+    <section id="view-analyze" class="space-y-8">
+      
+      <!-- Intro Banner -->
+      <div class="p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-800/90 to-slate-900 border border-slate-800 shadow-xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+              Cross-Company Financial & Strategic Analysis
+              <span class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2 py-0.5 rounded-full font-mono">n8n Powered</span>
+            </h2>
+            <p class="text-sm text-slate-400 max-w-3xl">
+              Upload two corporate Annual Reports (10-K, Annual Filings, or Statements). The workflow parses fundamentals, evaluates <strong>Long-term compounders</strong>, <strong>Short-term tactical plays</strong>, <strong>Dividend safety</strong>, and computes precise <strong>Sell/Exit timing criteria</strong>.
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="loadSampleData()" class="px-3.5 py-2 text-xs font-semibold rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 transition flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Load Sample Filings (Apple vs Microsoft)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dual File Upload Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Company A Card -->
+        <div class="rounded-2xl bg-slate-900 border border-slate-800 p-6 flex flex-col justify-between shadow-lg relative group">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/30">A</span>
+                <h3 class="font-semibold text-white">Target Company A</h3>
+              </div>
+              <span id="doc-status-a" class="text-xs text-slate-500 font-medium flex items-center gap-1">
+                <i data-lucide="circle" class="w-2.5 h-2.5 fill-slate-600 text-slate-600"></i> No file loaded
+              </span>
+            </div>
+
+            <!-- Metadata Inputs -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Company Name</label>
+                <input id="comp-a-name" type="text" value="Apple Inc." placeholder="e.g., Apple Inc." class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Ticker / Sector</label>
+                <div class="flex gap-2">
+                  <input id="comp-a-ticker" type="text" value="AAPL" placeholder="AAPL" class="w-1/2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white uppercase focus:outline-none focus:border-emerald-500 transition">
+                  <input id="comp-a-sector" type="text" value="Consumer Tech" placeholder="Tech" class="w-1/2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div id="dropzone-a" class="border-2 border-dashed border-slate-800 hover:border-emerald-500/60 rounded-xl p-6 text-center transition cursor-pointer bg-slate-950/50 group-hover:bg-slate-950/80">
+              <input type="file" id="file-a" accept=".pdf,.txt,.json,.md,.csv" class="hidden" onchange="handleFileUpload(event, 'A')">
+              <div class="flex flex-col items-center justify-center space-y-2" onclick="document.getElementById('file-a').click()">
+                <div class="w-12 h-12 rounded-full bg-slate-800/80 flex items-center justify-center text-slate-400 group-hover:text-emerald-400 transition">
+                  <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                </div>
+                <div class="text-sm font-medium text-slate-300">
+                  <span class="text-emerald-400 underline">Upload Annual Report</span> or drag & drop
+                </div>
+                <p class="text-xs text-slate-500">Supports PDF, TXT, Markdown, 10-K filings</p>
+                <div id="file-info-a" class="hidden text-xs text-emerald-400 font-mono bg-emerald-950/60 border border-emerald-800/50 px-3 py-1 rounded-md mt-2"></div>
+              </div>
+            </div>
+
+            <!-- Report Textarea Preview -->
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Or Paste Annual Report Excerpt / Financial Summary:</span>
+                <span id="char-count-a" class="text-slate-500 font-mono">0 chars</span>
+              </div>
+              <textarea id="text-a" rows="4" placeholder="Paste balance sheet, income statement, revenue growth, or 10-K key highlights here..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 font-mono focus:outline-none focus:border-emerald-500 transition leading-relaxed"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Company B Card -->
+        <div class="rounded-2xl bg-slate-900 border border-slate-800 p-6 flex flex-col justify-between shadow-lg relative group">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs border border-purple-500/30">B</span>
+                <h3 class="font-semibold text-white">Target Company B</h3>
+              </div>
+              <span id="doc-status-b" class="text-xs text-slate-500 font-medium flex items-center gap-1">
+                <i data-lucide="circle" class="w-2.5 h-2.5 fill-slate-600 text-slate-600"></i> No file loaded
+              </span>
+            </div>
+
+            <!-- Metadata Inputs -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Company Name</label>
+                <input id="comp-b-name" type="text" value="Microsoft Corp." placeholder="e.g., Microsoft" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-400 mb-1">Ticker / Sector</label>
+                <div class="flex gap-2">
+                  <input id="comp-b-ticker" type="text" value="MSFT" placeholder="MSFT" class="w-1/2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white uppercase focus:outline-none focus:border-emerald-500 transition">
+                  <input id="comp-b-sector" type="text" value="Cloud & Enterprise" placeholder="Cloud" class="w-1/2 bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-emerald-500 transition">
+                </div>
+              </div>
+            </div>
+
+            <!-- Upload Dropzone -->
+            <div id="dropzone-b" class="border-2 border-dashed border-slate-800 hover:border-purple-500/60 rounded-xl p-6 text-center transition cursor-pointer bg-slate-950/50 group-hover:bg-slate-950/80">
+              <input type="file" id="file-b" accept=".pdf,.txt,.json,.md,.csv" class="hidden" onchange="handleFileUpload(event, 'B')">
+              <div class="flex flex-col items-center justify-center space-y-2" onclick="document.getElementById('file-b').click()">
+                <div class="w-12 h-12 rounded-full bg-slate-800/80 flex items-center justify-center text-slate-400 group-hover:text-purple-400 transition">
+                  <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+                </div>
+                <div class="text-sm font-medium text-slate-300">
+                  <span class="text-purple-400 underline">Upload Annual Report</span> or drag & drop
+                </div>
+                <p class="text-xs text-slate-500">Supports PDF, TXT, Markdown, 10-K filings</p>
+                <div id="file-info-b" class="hidden text-xs text-purple-400 font-mono bg-purple-950/60 border border-purple-800/50 px-3 py-1 rounded-md mt-2"></div>
+              </div>
+            </div>
+
+            <!-- Report Textarea Preview -->
+            <div>
+              <div class="flex items-center justify-between text-xs text-slate-400 mb-1">
+                <span>Or Paste Annual Report Excerpt / Financial Summary:</span>
+                <span id="char-count-b" class="text-slate-500 font-mono">0 chars</span>
+              </div>
+              <textarea id="text-b" rows="4" placeholder="Paste balance sheet, income statement, revenue growth, or 10-K key highlights here..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 font-mono focus:outline-none focus:border-purple-500 transition leading-relaxed"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action & Strategy Control Bar -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
+        <div class="flex flex-wrap items-center gap-4 text-xs">
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400 font-medium">Investment Mandate:</span>
+            <select id="investor-profile" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200 text-xs focus:outline-none focus:border-emerald-500">
+              <option value="Balanced Growth & Value">Balanced Growth & Value</option>
+              <option value="Long-term Compounding Wealth">Long-term Compounding Wealth</option>
+              <option value="Aggressive Short-term Momentum">Aggressive Short-term Momentum</option>
+              <option value="Dividend Aristocrat & Cash Flow">Dividend Aristocrat & Cash Flow</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-slate-400 font-medium">Engine Mode:</span>
+            <span id="engine-badge" class="px-2.5 py-1 rounded-md bg-emerald-950 text-emerald-400 border border-emerald-800/50 text-[11px] font-mono">
+              n8n Local Workflow (Port 5678)
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button id="btn-run-analysis" onclick="runComparisonAnalysis()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 transition active:scale-95">
+            <i data-lucide="zap" class="w-5 h-5 fill-slate-950"></i> Run Comparative Financial Analysis
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading / Progress Indicator -->
+      <div id="analysis-progress" class="hidden rounded-2xl bg-slate-900/90 border border-slate-800 p-8 text-center space-y-4">
+        <div class="inline-flex items-center justify-center p-3 rounded-full bg-emerald-500/10 text-emerald-400 mb-2 animate-bounce">
+          <i data-lucide="brain-circuit" class="w-8 h-8 animate-pulse"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white">Executing Financial Analysis Workflow...</h3>
+        <p id="progress-step" class="text-sm text-slate-400 max-w-md mx-auto">Parsing annual reports and extracting revenue, margin, ROIC, and cash flow fundamentals...</p>
+        
+        <!-- Progress Bar -->
+        <div class="w-full max-w-md mx-auto bg-slate-800 rounded-full h-2.5 overflow-hidden">
+          <div id="progress-bar-fill" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-2.5 rounded-full w-1/4 transition-all duration-500"></div>
+        </div>
+      </div>
+
+      <!-- ==================== OUTPUT REPORT DASHBOARD ==================== -->
+      <div id="report-output" class="hidden space-y-8">
+        
+        <!-- Top Verdict Bar -->
+        <div class="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-emerald-500/30 p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+            <i data-lucide="award" class="w-48 h-48 text-emerald-400"></i>
+          </div>
+
+          <div class="relative z-10 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+              <div>
+                <span class="text-xs uppercase font-bold tracking-wider text-emerald-400 bg-emerald-950 px-3 py-1 rounded-full border border-emerald-800">
+                  Lead Recommendation
+                </span>
+                <h2 id="verdict-primary-title" class="text-2xl sm:text-3xl font-extrabold text-white mt-2">
+                  Company A (AAPL)
+                </h2>
+                <p id="verdict-timestamp" class="text-xs text-slate-400 mt-1 font-mono">Analyzed on September 6, 2026</p>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="text-right">
+                  <div class="text-xs text-slate-400 font-medium">Analyst Conviction</div>
+                  <div id="verdict-conviction" class="text-2xl sm:text-3xl font-black text-emerald-400">92%</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button onclick="exportReportToMarkdown()" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-1.5 transition" title="Export Markdown">
+                    <i data-lucide="download" class="w-4 h-4"></i> Export
+                  </button>
+                  <button onclick="window.print()" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 text-xs flex items-center gap-1.5 transition" title="Print Report">
+                    <i data-lucide="printer" class="w-4 h-4"></i> Print
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Executive Summary Text -->
+            <div class="bg-slate-950/60 rounded-xl p-5 border border-slate-800/80">
+              <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2 flex items-center gap-2">
+                <i data-lucide="file-text" class="w-4 h-4 text-emerald-400"></i> Executive Analyst Synthesis
+              </h4>
+              <p id="verdict-summary" class="text-sm text-slate-300 leading-relaxed font-sans">
+                Summary loading...
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Strategic Decision Quadrants -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- 1. Long-Term Investment -->
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-lg relative overflow-hidden group hover:border-emerald-500/40 transition">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+                  <i data-lucide="trending-up" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Long-Term Investment (5-10 Yrs)</h3>
+                  <p class="text-xs text-slate-400">Moat, ROIC & Wealth Compounding</p>
+                </div>
+              </div>
+              <span id="strat-lt-badge" class="px-2.5 py-1 rounded-md bg-blue-950 text-blue-400 text-xs font-bold border border-blue-800/60">
+                Recommended
+              </span>
+            </div>
+            <div class="space-y-3">
+              <div class="text-sm font-semibold text-emerald-400 flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4"></i> Top Pick: <span id="strat-lt-pick" class="text-white font-bold">Company</span>
+              </div>
+              <p id="strat-lt-rationale" class="text-xs text-slate-300 leading-relaxed bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                Rationale loading...
+              </p>
+            </div>
+          </div>
+
+          <!-- 2. Short-Term Investment -->
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-lg relative overflow-hidden group hover:border-emerald-500/40 transition">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
+                  <i data-lucide="zap" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Short-Term Investment (3-12 Mos)</h3>
+                  <p class="text-xs text-slate-400">Catalysts, Growth Velocity & Multiples</p>
+                </div>
+              </div>
+              <span id="strat-st-badge" class="px-2.5 py-1 rounded-md bg-amber-950 text-amber-400 text-xs font-bold border border-amber-800/60">
+                Tactical Play
+              </span>
+            </div>
+            <div class="space-y-3">
+              <div class="text-sm font-semibold text-amber-400 flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4"></i> Top Pick: <span id="strat-st-pick" class="text-white font-bold">Company</span>
+              </div>
+              <p id="strat-st-rationale" class="text-xs text-slate-300 leading-relaxed bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                Rationale loading...
+              </p>
+            </div>
+          </div>
+
+          <!-- 3. Dividend & Income Hold -->
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-lg relative overflow-hidden group hover:border-emerald-500/40 transition">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20">
+                  <i data-lucide="coins" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">Dividend & Cash Flow Hold</h3>
+                  <p class="text-xs text-slate-400">Yield Sustainability & Payout Safety</p>
+                </div>
+              </div>
+              <span id="strat-div-badge" class="px-2.5 py-1 rounded-md bg-emerald-950 text-emerald-400 text-xs font-bold border border-emerald-800/60">
+                Income Pick
+              </span>
+            </div>
+            <div class="space-y-3">
+              <div class="text-sm font-semibold text-emerald-400 flex items-center gap-2">
+                <i data-lucide="check-circle" class="w-4 h-4"></i> Top Pick: <span id="strat-div-pick" class="text-white font-bold">Company</span>
+              </div>
+              <p id="strat-div-rationale" class="text-xs text-slate-300 leading-relaxed bg-slate-950 p-3.5 rounded-xl border border-slate-800">
+                Rationale loading...
+              </p>
+            </div>
+          </div>
+
+          <!-- 4. Sell & Exit Strategy -->
+          <div class="rounded-2xl bg-slate-900 border border-rose-900/40 p-6 shadow-lg relative overflow-hidden group hover:border-rose-500/40 transition">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/20">
+                  <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="font-bold text-white text-base">When to Sell & Take Profits</h3>
+                  <p class="text-xs text-slate-400">Exit Triggers, Deterioration & Stops</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-md bg-rose-950 text-rose-400 text-xs font-bold border border-rose-800/60">
+                Risk Management
+              </span>
+            </div>
+            <div class="space-y-3">
+              <ul id="strat-sell-triggers" class="space-y-2 text-xs text-slate-300">
+                <!-- Injected sell triggers -->
+              </ul>
+              <div id="strat-target-inflection" class="text-xs text-amber-300/90 font-mono bg-amber-950/40 border border-amber-800/40 p-3 rounded-lg">
+                Exit Targets: Calculating...
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Comparative Metrics Table & Visual Radar Chart -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <!-- Metrics Table (2 cols) -->
+          <div class="lg:col-span-2 rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-lg space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <h3 class="font-bold text-white text-base flex items-center gap-2">
+                <i data-lucide="scale" class="w-5 h-5 text-emerald-400"></i> Head-to-Head Fundamental Scorecard
+              </h3>
+              <span class="text-xs text-slate-400">Normalized from Annual Filings</span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead>
+                  <tr class="border-b border-slate-800 text-slate-400 uppercase tracking-wider">
+                    <th class="py-3 px-3">Metric Category</th>
+                    <th id="th-comp-a" class="py-3 px-3 text-blue-400 font-bold">Company A</th>
+                    <th id="th-comp-b" class="py-3 px-3 text-purple-400 font-bold">Company B</th>
+                    <th class="py-3 px-3 text-emerald-400 font-bold">Advantage</th>
+                  </tr>
+                </thead>
+                <tbody id="metrics-table-body" class="divide-y divide-slate-800 text-slate-300 font-mono">
+                  <!-- Injected dynamic rows -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Radar Chart (1 col) -->
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-lg flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-white text-base flex items-center gap-2 mb-1">
+                <i data-lucide="radar" class="w-5 h-5 text-emerald-400"></i> Multi-Factor Profile
+              </h3>
+              <p class="text-xs text-slate-400 mb-4">Visual alignment across growth, quality, valuation & income</p>
+            </div>
+            <div class="relative w-full aspect-square flex items-center justify-center">
+              <canvas id="radarChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW 2: REPORTS ARCHIVE & DIRECTORY ==================== -->
+    <section id="view-archive" class="hidden space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+            <i data-lucide="folder-archive" class="w-6 h-6 text-emerald-400"></i> Generated Reports Archive
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">All historical dual-company comparative analyses are saved here locally.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-2.5"></i>
+            <input id="archive-search" oninput="renderArchiveList()" type="text" placeholder="Search by ticker or name..." class="bg-slate-900 border border-slate-800 rounded-lg pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 w-56">
+          </div>
+          <button onclick="clearAllArchive()" class="px-3 py-2 rounded-lg bg-rose-950/60 hover:bg-rose-900/80 text-rose-300 border border-rose-800/50 text-xs font-semibold flex items-center gap-1.5 transition">
+            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Clear Archive
+          </button>
+        </div>
+      </div>
+
+      <!-- Archive Directory Grid / List -->
+      <div id="archive-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Injected archive cards -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="archive-empty" class="hidden rounded-2xl bg-slate-900 border border-slate-800 p-12 text-center space-y-3">
+        <div class="w-12 h-12 rounded-full bg-slate-800 flex items-center justify-center text-slate-500 mx-auto">
+          <i data-lucide="inbox" class="w-6 h-6"></i>
+        </div>
+        <h3 class="text-base font-bold text-white">No Archived Reports Yet</h3>
+        <p class="text-xs text-slate-400 max-w-sm mx-auto">Run your first comparison analysis to automatically save the institutional report in this directory.</p>
+        <button onclick="switchView('analyze')" class="px-4 py-2 rounded-lg bg-emerald-500 text-slate-950 font-bold text-xs">
+          Start New Comparison
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ==================== CONFIGURATION MODAL ==================== -->
+  <div id="config-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-white text-base flex items-center gap-2">
+          <i data-lucide="cpu" class="w-5 h-5 text-emerald-400"></i> n8n Integration Settings
+        </h3>
+        <button onclick="toggleConfigModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block font-medium text-slate-300 mb-1">n8n Webhook URL</label>
+          <input id="cfg-webhook-url" type="text" value="http://localhost:5678/webhook/compare-reports" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 font-mono focus:outline-none focus:border-emerald-500">
+          <p class="text-slate-500 mt-1">Default webhook path created in the n8n workflow.</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+          <div class="font-semibold text-emerald-400 flex items-center gap-1.5">
+            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Standalone Fallback Engine Active
+          </div>
+          <p class="text-slate-400 leading-relaxed">
+            If n8n is offline or CORS is blocked, this frontend seamlessly runs the complete financial analysis algorithm right in the browser.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button onclick="toggleConfigModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs">Close</button>
+        <button onclick="saveSettings()" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+APPLE INC. - ANNUAL REPORT & 10-K HIGHLIGHTS
+
+Fiscal Year Financial Summary:
+- Total Net Sales: $383.285 Billion (Up 6.5% YoY)
+- Products Revenue: $298.085 Billion
+- Services Revenue: $85.200 Billion (+14.2% YoY, Gross Margin of 71.3%)
+- Gross Margin: $169.148 Billion (44.1% of sales)
+- Operating Income: $114.301 Billion (Operating Margin: 30.1%)
+- Net Income: $96.995 Billion (Diluted EPS: $6.13)
+- Cash Flow from Operations: $110.543 Billion
+- Free Cash Flow: $99.584 Billion
+
+Balance Sheet & Capital Returns:
+- Cash, Cash Equivalents & Marketable Securities: $162.1 Billion
+- Total Commercial Paper & Term Debt: $111.088 Billion
+- Total Stockholders' Equity: $62.146 Billion (Debt-to-Equity: 1.45x)
+- Share Repurchases: $77.550 Billion
+- Dividends Paid: $15.025 Billion (Annual Dividend Yield: 0.58%, Payout Ratio: 15.2%)
+
+Competitive Position & Economic Moat:
+- Active installed base exceeding 2.2 Billion devices worldwide.
+- High switching costs, unified hardware-software ecosystem (iOS, macOS, watchOS), and custom silicon (M-series / A-series).
+- Continuous services expansion (iCloud, Apple Pay, App Store, Apple TV+, Apple Care).
+
+Key Risk Factors:
+- Antitrust and regulatory challenges surrounding App Store commissions and default search agreements.
+- Geopolitical dependencies on supply chains in East Asia.
+- Extended upgrade cycles for premium consumer electronics.
