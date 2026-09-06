@@ -724,6 +724,56 @@ ${s.sellAndExitStrategy.whenToSell.map(t => `- ${t}`).join('\n')}
   document.body.removeChild(link);
 }
 
+// Test Webhook Connectivity
+async function testWebhookConnection() {
+  const url = document.getElementById('cfg-webhook-url').value.trim();
+  const resElem = document.getElementById('test-conn-result');
+  const btn = document.getElementById('btn-test-conn');
+
+  if (!url) {
+    resElem.textContent = 'Please enter a webhook URL.';
+    resElem.className = 'text-[11px] text-rose-400 mt-1';
+    return;
+  }
+
+  btn.innerHTML = '<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i> Testing...';
+  lucide.createIcons();
+
+  try {
+    const testPayload = {
+      companyA_name: 'Test A',
+      companyA_ticker: 'TSTA',
+      companyA_sector: 'Test',
+      companyA_text: 'Operating Margin: 25%, Revenue Growth: 10%',
+      companyB_name: 'Test B',
+      companyB_ticker: 'TSTB',
+      companyB_sector: 'Test',
+      companyB_text: 'Operating Margin: 30%, Revenue Growth: 12%',
+      investorProfile: 'Test'
+    };
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(testPayload)
+    });
+
+    if (res.ok) {
+      resElem.textContent = '✓ Successfully connected to your local n8n workflow!';
+      resElem.className = 'text-[11px] text-emerald-400 font-semibold mt-1';
+    } else {
+      resElem.textContent = `Server reachable but returned status ${res.status}. Make sure n8n workflow is Active/Listening.`;
+      resElem.className = 'text-[11px] text-amber-400 mt-1';
+    }
+  } catch (err) {
+    resElem.textContent = 'Connection failed. (Make sure ngrok/tunnel or n8n is running and URL starts with https://)';
+    resElem.className = 'text-[11px] text-rose-400 mt-1';
+  } finally {
+    btn.innerHTML = '<i data-lucide="activity" class="w-3.5 h-3.5"></i> Test';
+    lucide.createIcons();
+  }
+}
+
 // Modal & Settings Helpers
 function toggleConfigModal() {
   const modal = document.getElementById('config-modal');
@@ -735,6 +785,10 @@ function saveSettings() {
   if (url) {
     state.webhookUrl = url;
     localStorage.setItem('equi_webhook_url', url);
+    const badge = document.getElementById('engine-badge');
+    if (badge) {
+      badge.textContent = url.includes('ngrok') || url.includes('tunnel') || url.includes('https') ? 'n8n Live Cloud Tunnel' : 'n8n Local Workflow';
+    }
   }
   toggleConfigModal();
 }

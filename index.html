@@ -501,7 +501,7 @@
     <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl space-y-6">
       <div class="flex items-center justify-between border-b border-slate-800 pb-3">
         <h3 class="font-bold text-white text-base flex items-center gap-2">
-          <i data-lucide="cpu" class="w-5 h-5 text-emerald-400"></i> n8n Integration Settings
+          <i data-lucide="cpu" class="w-5 h-5 text-emerald-400"></i> n8n Connection & Multi-Device Setup
         </h3>
         <button onclick="toggleConfigModal()" class="text-slate-400 hover:text-white">
           <i data-lucide="x" class="w-5 h-5"></i>
@@ -510,24 +510,32 @@
 
       <div class="space-y-4 text-xs">
         <div>
-          <label class="block font-medium text-slate-300 mb-1">n8n Webhook URL</label>
-          <input id="cfg-webhook-url" type="text" value="http://localhost:5678/webhook/compare-reports" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 font-mono focus:outline-none focus:border-emerald-500">
-          <p class="text-slate-500 mt-1">Default webhook path created in the n8n workflow.</p>
+          <label class="block font-medium text-slate-300 mb-1">Active n8n Webhook URL</label>
+          <div class="flex gap-2">
+            <input id="cfg-webhook-url" type="text" value="http://localhost:5678/webhook/compare-reports" placeholder="https://xxxx.ngrok-free.app/webhook/compare-reports" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-slate-200 font-mono focus:outline-none focus:border-emerald-500">
+            <button onclick="testWebhookConnection()" id="btn-test-conn" class="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 font-semibold border border-slate-700 shrink-0 flex items-center gap-1">
+              <i data-lucide="activity" class="w-3.5 h-3.5"></i> Test
+            </button>
+          </div>
+          <p id="test-conn-result" class="text-[11px] text-slate-400 mt-1">For live Vercel usage on other devices, use an HTTPS tunnel URL (ngrok/Cloudflare).</p>
         </div>
 
         <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
           <div class="font-semibold text-emerald-400 flex items-center gap-1.5">
-            <i data-lucide="check-circle-2" class="w-4 h-4"></i> Standalone Fallback Engine Active
+            <i data-lucide="radio" class="w-4 h-4"></i> How to connect from any device to your local n8n:
           </div>
-          <p class="text-slate-400 leading-relaxed">
-            If n8n is offline or CORS is blocked, this frontend seamlessly runs the complete financial analysis algorithm right in the browser.
-          </p>
+          <ol class="list-decimal list-inside text-slate-400 space-y-1 leading-relaxed">
+            <li>Run a free tunnel on your PC: <code class="text-emerald-300 bg-slate-900 px-1.5 py-0.5 rounded">n8n start --tunnel</code> or <code class="text-emerald-300 bg-slate-900 px-1.5 py-0.5 rounded">ngrok http 5678</code></li>
+            <li>Copy the HTTPS tunnel URL provided in your terminal.</li>
+            <li>Append <code class="text-emerald-300">/webhook/compare-reports</code> and paste it here on any device.</li>
+            <li>Whenever you upload reports on Vercel from your phone/tablet, it triggers your local n8n automations directly!</li>
+          </ol>
         </div>
       </div>
 
       <div class="flex justify-end gap-3 pt-2">
         <button onclick="toggleConfigModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium text-xs">Close</button>
-        <button onclick="saveSettings()" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs">Save Settings</button>
+        <button onclick="saveSettings()" class="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold text-xs">Save & Apply</button>
       </div>
     </div>
   </div>
