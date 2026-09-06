@@ -1,3 +1,5 @@
-local_server.js
+*.exe
+*.zip
+*.log
 workflow_annual_report_comparison.json
 .git
